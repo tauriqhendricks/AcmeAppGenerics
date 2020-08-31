@@ -79,11 +79,56 @@ namespace Acme.Biz.Tests
             // Act
             var actual = repo.Retrieve();
 
+            var vendroQuery = from v in expected
+                              where v.CompanyName.Contains("xy")
+                              orderby v.CompanyName
+                              select v;
+            //Console.WriteLine($"Query: {vendroQuery}");
+            foreach (var item in vendroQuery)
+            {
+                Console.WriteLine($"Query: {item}");
+            }
+
+            // Assert
+            CollectionAssert.AreEqual(expected, actual.ToList());
+        }
+
+        [TestMethod()]
+        public void RetrieveTestWithIterator()
+        {
+            // Arange
+            var repo = new VendorRepository();
+            var expected = new List<Vendor>
+                {
+                    new Vendor()
+                    {
+                        VendorId = 1,
+                        CompanyName = "ABC Corp",
+                        Email = "abc@gmail.com"
+                    },
+
+                    new Vendor()
+                    {
+                        VendorId = 12,
+                        CompanyName = "XYZ Inc",
+                        Email = "xyz@gmail.com"
+                    }
+                };
+
+            // Act
+            var vendorIterator = repo.RetrieveWithIterator();
+            foreach (var vendor in vendorIterator)
+            {
+                Console.WriteLine(vendor);
+            }
+
+            var actual = vendorIterator.ToList();
+
             // Assert
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        [TestMethod()]
+        /*[TestMethod()]
         public void RetrieveWithKeysTest()
         {
             // Arrange
@@ -113,6 +158,6 @@ namespace Acme.Biz.Tests
 
             // Assert
             CollectionAssert.AreEqual(expected, actual);
-        }
+        }*/
     }
 }

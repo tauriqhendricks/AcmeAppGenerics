@@ -143,5 +143,100 @@ namespace Acme.Biz.Tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod()]
+        public void SendEmailTest()
+        {
+            // Arange
+            var repo = new VendorRepository();
+            var vendorsCollection = repo.Retrieve();
+            var expected = new List<string>
+                {
+                    "Message sent: Important message for: ABC Corp",
+                    "Message sent: Important message for: XYZ Inc"
+                };
+
+            var vendors = vendorsCollection.ToList();
+
+            // Act
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            // Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /*[TestMethod()]
+        public void SendEmailTestAdd()
+        {
+            // Arange
+            var repo = new VendorRepository();
+            var vendorsCollection = repo.Retrieve();
+            vendorsCollection.Add(new Vendor()
+            {
+                VendorId = 7,
+                CompanyName = "EFG Ltd",
+                Email = "efg@efg.com"
+            });
+
+            var vendorsMaster = repo.Retrieve();
+
+            var expected = new List<string>
+                {
+                    "Message sent: Important message for: ABC Corp",
+                    "Message sent: Important message for: XYZ Inc"
+                };
+
+            var vendors = vendorsCollection.ToList();
+
+            // Act
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            // Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }*/
+
+        [TestMethod()]
+        public void SendEmailTest_Array()
+        {
+            // Arange
+            var repo = new VendorRepository();
+            var vendorsCollection = repo.Retrieve();
+            var expected = new List<string>
+                {
+                    "Message sent: Important message for: ABC Corp",
+                    "Message sent: Important message for: XYZ Inc"
+                };
+
+            var vendors = vendorsCollection.ToArray();
+            Console.WriteLine(vendors.Length);
+
+            // Act
+            var actual = Vendor.SendEmail(vendors, "Test Message");
+
+            // Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void SendEmailTest_Dictionary()
+        {
+            // Arange
+            var repo = new VendorRepository();
+            var vendorsCollection = repo.Retrieve();
+            var expected = new List<string>
+                {
+                    "Message sent: Important message for: ABC Corp",
+                    "Message sent: Important message for: XYZ Inc"
+                };
+
+            // what to use as a key,  company name
+            var vendors = vendorsCollection.ToDictionary(v => v.CompanyName);
+
+            // Act
+            var actual = Vendor.SendEmail(vendors.Values, "Test Message");
+
+            // Assert
+            CollectionAssert.AreEqual(expected, actual);
+        }
     }
 }

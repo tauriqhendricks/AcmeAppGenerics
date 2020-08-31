@@ -32,7 +32,7 @@ namespace Acme.Biz
             return vendor;
         }
 
-        public List<Vendor> Retrieve()
+        public IEnumerable<Vendor> Retrieve()
         {
             if (vendors == null)
             {
@@ -65,10 +65,26 @@ namespace Acme.Biz
         }
 
         /// <summary>
+        /// Retrieves all the aproved vendors, one at a time
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Vendor> RetrieveWithIterator()
+        {
+            // Get the data from the database
+            var vendors = Retrieve();
+
+            foreach (var vendor in vendors)
+            {
+                Console.WriteLine($"vendor id: {vendor.VendorId}");
+                yield return vendor;
+            }
+        }
+
+        /// <summary>
         /// Retrieves all of the approved vendors
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, Vendor> RetrieveWithKeys()
+        /*public Dictionary<string, Vendor> RetrieveWithKeys()
         {
             var vendors = new Dictionary<string, Vendor>
             {
@@ -116,10 +132,10 @@ namespace Acme.Biz
             if (vendors.TryGetValue("XYZ", out Vendor vendor))
             {
                 Console.WriteLine(vendor);
-            }*/
+            }
 
             return vendors;
-        }
+        }*/
 
         public T RetrieveValue<T>(string sql, T defaultValue)
         {
